@@ -1,4 +1,98 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><search><entry><title>关于 Hugo NexT 组织</title><url>/about.html</url><categories/><tags/><content type="html">Hugo NexT 组织是由众多喜爱 NexT 主题及风格的世界各地友人共同组建而成，为的就是让这个主题继续在 Hugo 引擎中也能得到发扬光大，在此也欢迎你的加入！
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><search><entry><title>为 Microsoft Surface 设备准备的 openSUSE Tumbleweed 内核</title><url>/post/linux-kernel-for-microsoft-surface-devices/</url><categories><category>openSUSE</category></categories><tags><tag>打包相关</tag><tag>openSUSE</tag><tag>Linux</tag><tag>Surface</tag></tags><content type="html"><![CDATA[ 为 Microsoft Surface1 设备准备的 openSUSE Tumbleweed2 内核 完成于 2023 年 3 月 20 日，该文章部分内容具有时效性，您看见此文章时本人可能已经不再维护，请联系 Github 和 Open Build Serivice 上相关页面甄别。
+缘起 简单来说，我拥有一台 Surface Book 1，我想在上面运行 openSUSE. 于是我搜寻到了 linux surface ——一个由开源社区维护的 Surface 设备的 Linux 驱动。这些伟大的开发者为 Microsoft Surface 设备提供了相当关键的支持，使得它们得以更好与 Linux 操作系统一起帮助我们完成工作。文末的 附录：特性表 将展示已经得到支持的特性。
+然而，在我了解到这些工作时，只有 Debian / Ubuntu 、 Fedora 、 Arch 这几个主流的分发版和 Gentoo、NixOS 有比较好的支持。 openSUSE 作为开源社区的一大贡献者，却在那 安装和设置指南 上缺少位置。为了方便我自己和其他用户，我决定在 开放构建服务 (Open Build Service) 上为 Tumbleweed 发行版构建打包相应的 Linux 内核。
+安装指南 本指南专为 openSUSE Tumbleweed 发行版撰写，也存在其他分发版的安装指南，请查阅 Installation and Setup 3.
+一、准备 你需要：
+一台支持的 Surface 设备，可以查看 附录：特性表 。
+一个 USB 作为安装媒介。
+对于 Surface Laptop 产品线的设备，你还需要一把备用键盘。（可能的话，还需要鼠标和 USB 接口以便安装 Linux。）
+在开始之前，强烈建议通过 Windows 更新来更新所有 Windows 上的固件。这应该能解决许多硬件层面的缺陷。
+二、安装 openSUSE Tumbleweed ⚠️警告：
+如果你计划使用磁盘加密(安装前也请注意你的 BitLocker4)或是已经使用了磁盘加密，请确保一些模块在你的初始 ram 文件系统中（参考 附录：磁盘加密 中。也就是说，确保这些模块在磁盘加密解锁界面出现时被加载，否则你将会由于不能使用键盘无法解锁你的硬盘。
+和下面的注意事项一起阅读、处理非常重要，因为一些设备需要额外的设置。
+附录：磁盘加密 的操作适用于已经安装了 Linux 系统的设备。如果想要在安装器的系统上启用磁盘加密，你需要调整操作并完成一些额外的任务
+如果你想要之后再启用磁盘加密且，你必须要执行此步操作如果目前还没的话。
+📓注意：
+每个设备都有自己的一些怪癖，需要进行一些额外调整。查看 Supported Devices and Features 来寻求更多指导。你也许应该在安装前和安装之后都看一看其中的说明。
+1. 制作安装U盘 这部分内容可以遵循 openSUSE 的官方指导，一下是一些说明：
+官方下载渠道 SDB:制作安装U盘 openSUSE 中文 Wiki 的指导
+Create installation USB stick - openSUSE Wiki 英文维基
+安装 非官方的 openSUSE Leap 15.4 指南中的安装说明。
+我的个人理解：鉴于你有一台安装了 Windows 的 Surface 设备， Etcher 是一个免费的开源实用工具，它傻瓜式的帮助你制作安装U盘，也经过了我的检验。
+2. 压缩 Windows 系统的分卷（作为双系统安装） 如果你不想保留 Windows 操作系统，可以跳过此步。
+按「Windows 徽标键+S」搜索「磁盘管理」或者前往「控制面板」→「系统和安全」→「Windows 工具」→「计算机管理」→「存储」→「磁盘管理」
+右键 Windows 系统的分区并按你喜好压缩分卷（推荐最小保留 50GB）。
+对于 Surface Book 产品线的用户，双系统可能是一个比较好的选择，虽然通过此内核在 Linux 下仍能够分离屏幕和键盘，但是在 Linux 下无法解决的问题仍可能发生，参考 Issue #93 和 Issue #1023 .
+3. 修改 Secure Boot 选项 参考 如何使用 Surface UEFI 修改 Secure Boot 选项为 &ldquo;Microsoft &amp; 3rd party CA&rdquo;, 具体参见「安全性」部分。
+4. 修改启动顺序以使得能从U盘启动 参考3中的链接
+5. 安装 安装 这里有安装界面的截图和过程步骤。
+三、安装内核 经过前面的步骤后，在你的设备上应该有了可以启动的 Linux 发行版，但是在一些比较新的 Surface 设备上，目前会缺少很多特性。在这一步，你将安装打包好的内核。开发者们正努力让改变在上游实现。
+在安装自定义内核之前，确保您没有安装了任何 Linux 内核源码树外的内核模块的DKMS版本(zfs → zfs-DKMS, nvidia→ nvidia- DKMS等)。否则，这些模块将无法与定制的 linux-surface内核一起工作。如果您不知道 DKMS/akmod 或ZFS是什么，或者不依赖于ZFS文件系统，您可以(很可能)忽略这一部分。基本操作所需的所有驱动程序都应该包含在内核本身中，任何外部内核模块都可以在以后安装。
+🛎️声明：
+该内核由本人 @Taivasjumala 维护且需要各位来当一波小白鼠。如果你遇到了问题欢迎到 Open Build Service 上的 kernel-source 页面的评论区反馈，在知乎的评论区反馈可能因为时效性不能很好的得到解答。如果通过 Github Issues 反馈 openSUSE 内核相关问题请@我。
+Open Build Service (OSC) 上的内核设置与每当上游（ Tumbleweed 内核源码）保存同步并自动构建此内核包以保持更新。但是，&ldquo;linux-surface&quot;部分代码被打包在 patches.addon （你可以阅读 该文件 的第 385 行了解我们的 patch 是如何添加的），通常的更新应该工作良好，只是要在有一个新的&rdquo; Announcements and updates &ldquo;时，小心地进行内核更新。因为我可能不会将这些变化那么快地应用到我们的内核中。所以强烈建议订阅相关通知（通过侧栏的 &ldquo;Notifications&rdquo; 项目，我亦通过该方式保持接收通知来维护此内核）。
+我们有三种方式安装定制的内核。
+1. 通过 openSUSE Software 网页相关页面安装 访问 kernel-default 页面，请查看「发行版 - openSUSE Tumbleweed」中选择点击「显示社区软件包」并找到 home:TaivasJumala:Surface 项目，点击一键安装进行安装。之后会下载一个一键安装器，运行后将会自动安装。
+2. 通过 Zypper 命令行工具安装 通过 URL 添加仓库：
+sudo zypper addrepo https://download.opensuse.org/repositories/home:/TaivasJumala:/Surface/openSUSE_Tumbleweed/home:TaivasJumala:Surface.repo 安装软件包：
+sudo zypper install -r &#39;Linux Surface (openSUSE_Tumbleweed)&#39; kernel-default 上述操作亦可通过 yast 提供的 GUI 界面执行对应的操作完成。
+3. 使用 OBS Package Installer (OPI) 你可以查看 OPI 的 Github 仓库 了解相关信息，这里仅说明如何使用。
+安装 OPI：
+sudo zypper install opi 安装 kernel-default
+opi kernel-default 这时它会要求你通过数字选择要安装的软件包（这里可能是1 并按回车），然后键入 home:TaivasJumala:Surface ! 前的数字并按回车开始安装。
+安装后它会询问你是否保留提供软件包的仓库，这里我们可以选择保留以便得到未来的更新。如果你错过了也没关系，你可以使用方法2中的做法来添加仓库。
+此外，你可能想查看 yast 中 引导加载器 的设置来确保用上了新的内核。特别是当你设置了引导加载程序选项中的超时为 0 时且又没有修改默认引导项。同时我还建议出于安全原因保留原来的内核，以免紧急情况没无法正常的启动。
+openSUSE 支持 secure boot（这也是我们在 UEFI 中修改 Secure Boot 选项的原因）。你安装后的第一次启动会需要选择 Enroll MOK 并输入你 root 用户密码。
+之后 恭喜你！ 现在你有了一台运行 Linux 的 Surface 设备。
+在你完成了安装步骤之后，以下事项是你应该考虑的：
+正如我所做的一样，你也许该考虑订阅 Announcements and updates . 例如，在 Changes in v6.1.18 / v6.2.5 中， atomisp 导致了一台 Surface 3 设备无法启动，开发者们暂时停用了它。基于稳定性的考量，你也应该了解最新的变化。
+由 mwifiex 导致的无线问题在最近的内核中应该会显著减少，如果仍然遇到问题，可以参考（暂无翻译）：
+Marvell 88W8897 Quirks Known Issues and FAQ 如果声音质量不好，你大概率需要调整位于/etc/pulse/daemon.conf 的 Pulse Audio 设置，并设置 speex-float-5 .
+一下额外的软件包你可能感兴趣：
+iptsd 提供笔的支持，目前需要从源码编译 libwacom-surface gnome 环境下提供更好的笔和触控支持，目前需要从源码编译。 如果你使用 Surface Book 2:
+surface-dtx-daemon 允许你更好的控制屏幕键盘分离，目前需要从源码编译。 surface-control 允许你更好地控制独显，目前需要从源码编译。 对相机的支持仍在进行中。一些设备（特别是 Surface Book and Book 2, Pro 4, 5, and 6, 以及 Go 和 Go 2 设备）需要你编译并安装 libcamera ( 相关步骤 ). 具体支持的设备请查看 附录：相机 。想了解更多，你可以查看正在进行的讨论 Camera support #91 .
+设置你的时钟为本地时间来解决双系统偏差 sudo timedatectl set-local-rtc 1 sudo hwclock --systohc --localtime 触控支持 在一些比较旧的设备上的触摸屏被称作 Intel Precise Touch &amp; Stylus （简称 IPTS）。新一些的设备则称作 Intel Touch Host Controller（简称 ITHC）。除了 Go 产品线，从 Surface Pro 4开始的所有基于英特尔的设备都使用 IPTS 或 ITHC.
+为了校准你的屏幕，你可以查看 附录：校准 IPTS 。
+如果你想要使用触屏手势（触摸滚动，缩放等），你需要知道一些基本知识：
+您应该确保运行的是 Wayland 桌面会话，而不是 X11/Xorg 会话。Wayland 有对触摸输入的原生支持，而 Xorg 本质上是在你触摸屏幕时模拟鼠标指针。您可以在系统的登录屏幕上选择会话类型。
+重要的是，您的应用程序也要在 Wayland 上运行。如果桌面运行在 Wayland 上，但应用程序使用 XWayland 兼容层，X11 协议再次成为限制因素。要检查应用程序是否运行在 X11 或 Wayland 上，请在终端窗口中运行 xkill，然后单击应用程序的窗口。如果它关闭，应用程序运行在 X11 上，如果什么都没有发生，它运行在 Wayland 上。
+手势功能都依赖于你正在运行的软件。这包括应用程序（如 Firefox）和桌面环境（如GNOME）。驱动程序只能向应用程序提供一组输入坐标。默认情况下，系统的行为把你的一次触摸算作一次鼠标点击，或者当你单指拖拽时算作使用鼠标拖拽。
+Firefox 如果 Firefox 运行在 Wayland 上，它默认支持触摸输入。如果您正在运行一个 Wayland 会话，请将 MOZ_ENABLE_WAYLAND=1 添加到 /etc/environment （一些发行版默认这样做）。如果正在运行 X11 会话，则可以使用 MOZ_USE_XINPUT2=1. 为了改善缩放行为，你可以在 about:config 页面启用 apz.allow_zoom.
+Visual Studio Code 使用命令行时添加 --touch-events. 另一种方法是编辑 /usr/share/applications/code.desktop 并在 Exec 行中添加改选项
+这可能也适用于其他基于 Electron 的应用程序。
+附录 附录内容翻译时间：2023-03-20
+特性表 不是所有的特性在每台设备上都实现了。详细请查看 Supported Devices and Features ✓ - 该特性得到了支持。 ? - 未知，你可以自行更新检查。 ❌ - 该特性未被支持切不会工作。 N/A - 该特性设备本身就不支持。 🧪 - 实验中。该特性目前由实验性代码支持。 Surface Tablets 设备 S3 SGO SGO2 SGO3 SP1 SP2 SP3 SP4 SP5 SP6 SP7 SP7+ SP8 SP9(I)¹⁹ 键盘 ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓¹ ✓¹ 触摸板 ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓¹ ✓¹ 平板模式 ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓¹ 触摸屏 ✓⁵ ✓ ✓ ✓ ✓ ✓ ✓ ✓¹ ✓¹ ✓¹ ✓¹ ✓¹ ✓¹ ✓¹ 笔 ✓⁵ ✓ ✓ ✓ ✓ ✓ ✓ ✓¹ ✓¹ ✓¹ ✓¹ ✓¹ ✓¹ ✓¹ WiFi ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ LTE ✓⁵ ✓⁷ ✓⁷ ✓⁷ N/A N/A N/A N/A ✓⁷ N/A N/A ✓ ✓ N/A 蓝牙 ✓¹⁵ ✓ ✓ ✓ ✓ ✓ ✓¹⁵ ✓¹⁵ ✓¹⁵ ✓¹⁵ ✓ ✓ ✓ ✓ 喇叭 ✓⁵ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ 按钮 ✓ ✓ ✓ ✓¹ ✓ ✓ ✓ ✓ ✓ ✓ ✓² ✓² ✓ ✓¹ SD 卡读取器 ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ N/A N/A 待机 (Suspend) ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ 休眠(Hibernate) ✓¹ ✓ ? ❌ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ? ✓¹⁹ S0ix³ ✓ ? ✓ ✓ N/A N/A ✓ ✓ ✓ ✓ ✓ ? ✓ ✓²¹ 传感器 ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ? ✓¹⁷ ? 电池状态 ✓⁵ ✓ ✓ ✓¹ ✓ ✓ ✓ ✓ ✓⁸ ✓⁸ ✓⁹ ✓⁹ ✓⁹ ✓⁹ 性能模式 ❌ ❌ ❌ ✓ ❌ ❌ ❌ ❌ ✓⁹ ✓⁹ ✓⁹ ✓⁹ ✓⁹ ✓⁹ 相机 ❌ ¹⁰ ¹⁰ ¹⁰ ✓ ✓ ✓ ¹⁰ ¹⁰ ¹⁰ ❌ ❌ ❌ ❌ Surface Books 和 Surface Laptop Studio 设备 SB SB2 SB3 SLS 键盘 ✓ ✓ ✓⁹ ✓⁹ 触摸板 ✓ ✓ ✓⁹ ✓¹² 平板模式 ✓ ✓ ✓ ✓¹⁶ 触摸屏 ✓¹ ✓¹ ✓¹ ✓¹ 笔 ✓¹ ✓¹ ✓¹ ✓¹ WiFi ✓ ✓ ✓ ✓ 蓝牙 ✓¹⁵ ✓¹⁵ ✓ ✓ 喇叭 ✓ ✓ ✓ ✓ 按钮 ✓ ✓ ✓ ✓ SD 卡读取器 ✓ ✓ ✓ N/A 待机 ✓ ✓ ✓ ✓ 休眠 ✓ ✓ ✓ ✓ S0ix ³ ? ✓¹ ? ✓ 传感器 ✓ ✓ ? ✓ 电量状态 ✓ ✓⁸ ✓⁹ ✓⁹ 性能模式 ❌ ✓⁸ ✓⁹ ✓⁹ 独显 ✓¹ ✓⁹ ✓⁹ ✓ 相机 ¹⁰ ¹⁰ ❌ ✓ Surface Laptops 设备 SL SL2 SL3(A) SL3(I) SL4(A) SL4(I) SL5¹⁹ SLG SLG2 SLSE 键盘 ✓⁹ ✓⁹ ✓⁹ ✓⁹ ✓⁹ ✓⁹ ✓²⁰ ✓ ✓ ✓ 触摸板 ✓⁹ ✓⁹ ✓⁹ ✓⁹ ✓⁹ ✓⁹ ✓²⁰ ✓ ✓ ✓ 触摸屏 ✓¹ ✓¹ ❌ ✓¹ ❌ ✓¹ ✓¹ ✓ ✓ N/A 笔 ✓¹ ✓¹ ❌ ✓¹ ❌ ✓¹ ✓¹ N/A N/A N/A WiFi ✓ ✓ ✓ ✓ ✓ ✓ ? ✓ ✓ ✓ 蓝牙 ✓¹⁵ ✓¹⁵ ✓ ✓ ✓ ✓ ? ✓ ✓ ✓ 喇叭 ✓ ✓ ✓ ✓ ✓ ✓ ? ✓ ✓ ✓ 按钮 ✓ ✓ ✓² ✓² ✓¹ ✓¹ ? ✓ ✓ ✓ 待机 ✓ ✓ ⁴ ✓ ? ? ¹⁹ ✓ ✓ ✓ 休眠 ✓ ✓ ✓ ✓ ? ? ? ✓ ✓ ✓ S0ix³ ✓ ✓ ✓ ✓ ✓¹¹ ? ? ✓ ✓ ? 传感器 ✓ ✓ ✓ ❌ ✓ ? ? ✓ ✓ ✓ 电量状态ţ ✓⁸ ✓⁸ ✓⁹ ✓⁹ ✓⁹ ✓⁹ ✓ ✓⁹ ✓¹⁸ ✓ 性能模式 ✓⁸ ✓⁸ ✓⁹ ✓⁹ ✓⁹ ✓⁹ ✓²⁰ ✓⁹ ✓¹⁸ ? 相机 ❌ ❌ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ✓ ¹ 需要 Linux-Surface 内核 ² 需要 Linux 5.4+ （包括 Ubuntu 20.04+ （此前的版本不确定） ³ 也被称作「现代待机」(&ldquo;Modern Standby&rdquo; / &ldquo;Connected Standby&rdquo;) ⁴ 待机，但是只会唤醒外置键盘 ⁵ 访问 Surface 3 查看详情 ⁷ 查看 此页 查看设置信息 ⁸ 需要 Linux 5.12+ 或 Linux-Surface 内核 ⁹ 需要 linux 5.13+ 或 Linux-Surface 内核 ¹⁰ 相机支持正在开发中 ¹¹ 部分支持且需要额外补丁 #458 ¹² 需要一些对 libinput 的额外操作。 查看 这里 获得详细信息。 ¹⁵ Marvell Wi-Fi/蓝牙芯片有硬件上的缺陷，如果蓝牙或者任何低电量设备配对（不是连接）那么系统的低电量设置将不会生效。 为了最好的电池寿命，确保不要配对任何的低电量蓝牙设备（包括 Surface Pen）。 ¹⁶ 需要 Linux-Surface 内核 ≥ 5.18.4 ¹⁷ 需要 Linux-Surface 内核 ≥ 5.18.7 ¹⁸ 需要 Linux-Surface 内核 ≥ 5.18.10 ¹⁹ 对于 12 代因特尔设备有一些会影响到很多搭载那代芯片的 Surface 设备，参考 Intel-12th-Generation-Devices-Issues 获取更多的信息。 ²⁰ 需要 Linux-Surface 内核 ≥ 6.0.8-3 ²¹ s0ix 的表现运行时屏幕关闭的时候相当差劲在（由 S0ixSelftestTool 测试） 磁盘加密 在键盘通过 Surface Aggregator Module 连接的设备上，即 Surface Laptop 2、3和4，Surface Book 3 以及 Surface Laptop Studio，您需要确保所需的驱动程序包含在 initramfs/initrd 中。
+要做到这一点，你需要确保 initramfs/initrd 中包含以下模块（例如，通过查看 mkinitcpio.conf或类似的内容，这取决于你使用的发行版）：
+surface_aggregator, surface_aggregator_registry, surface_aggregator_hub, surface_hid_core 8250_dw （用于和嵌入式控制器通信） 取决于你的 Surface 型号
+surface_hid （Surface Laptop 3/Surface Book 3 或是更新的设备） surface_kbd (Surface Laptop 1 and 2). 根据编译进的 GPIO 支持, 你可能还需要包括以下模块：
+pinctrl_amd （仅对 AMD 型号） intel_lpss 和 intel_lpss_pci （仅对 Intel 型号） pinctrl_icelake 对于 Ice Lake 的 Intel CPU (Surface Laptop 3/Surface Book 3) pinctrl_tigerlake 对于 Tiger Lake 的 Intel CPUs (Surface Laptop 4/Surface Laptop Studio) 要强调的一点是所有重新构建 initramfs 的操作都要在从 Linux-Surface 内核上启动的系统上进行。
+相机 即使被标注为✅支持，成像质量也许还并不那么好。算法还处在调整中，也许甚至还需要一些针对相机的专门调整。
+Device ISP Front Back IR Surface Go IPU3 OV5693 ✅ OV8865 ✅ OV7251 🚫 Surface Go 2 IPU3 OV5693 ✅ OV8865 ✅ OV7251 🚫 Surface Go 3 IPU3 OV5693 ✅ OV8865 ✅ OV7251 🚫 Surface Pro 4 IPU3 OV5693 ✅ OV8865 ✅ OV7251 🚫 Surface Pro 5 IPU3 OV5693 ✅ OV8865 ✅ OV7251 🚫 Surface Pro 6 IPU3 OV5693 ✅ OV8865 ✅ OV7251 🚫 Surface Pro 7 IPU4 OV5693 🚫 OV8865 🚫 OV7251 🚫 Surface Book 1 IPU3 OV5693 ✅ OV8865 ✅ OV7251 🚫 Surface Book 2 13&rdquo; IPU3 OV5693 ✅ OV8865 ✅ OV7251 🚫 Surface Book 3 IPU4 OV5693 🚫 OV8865 🚫 OV7251 🚫 Surface Laptop 1 IPU3 OV9734 🚫 N/A OV7251 🚫 Surface Laptop 2 IPU3 OV9734 🚫 N/A OV7251 🚫 Surface Laptop 3 15&quot; AMD OV5693 ✅ N/A OV7251 ✅ Surface Pro 7 和 the Surface Book 3 因为使用 IPU4 目前无法被支持。
+校准IPTS iptsd 的手掌误触识别依赖于测量每个接触的大小和纵横比，然后将这些值与参考进行比较，以确定接触是否有效。默认值将试图覆盖大多数人的手掌大小，但可以（并且建议）调整这些值以更好地匹配您的手掌。这也将进一步改善手指不识别现象。
+值得校准的值有:
+SizeMin（默认值:0.2 cm）
+SizeMax（默认值:2.0 cm）
+AspectMin（默认值:1.0）
+AspectMax（默认值:2.5）
+要校准 iptsd，您需要测量自己手指的大小，然后将这些值输入守护进程的配置文件。等等！在你离开并拿起一把尺子(或者只是离开)之前。为了使测量更容易，iptsd包含了一个工具iptsd-calibrate，可以为您进行这些测量。
+你要做的第一件事就是停止 iptsd :
+sudo systemctl stop &#39;iptsd@*.service&#39; 然后运行测量工具：
+sudo iptsd-calibrate $(sudo iptsd-find-hidraw) 你会看见类似于：
+[17:46:55.678] [info] Connected to device 045E:0021 [17:46:55.678] [info] Samples: 0 [17:46:55.678] [info] Size: 0.000 (Min: 0.000; Max: 0.000) [17:46:55.678] [info] Aspect: 0.000 (Min: 0.000; Max: 0.000) 只要你触摸显示器，iptsd 就会更新一次数值。现在可以开始实际的校准过程。用每根手指触摸屏幕，一次用力按压，一次轻轻按压。然后把你所有的手指同时放在显示器上。你还应该做一些常用的手势，比如用三根或四根手指捏缩放或在屏幕上滑动，因为手势往往会使接触变形。如果你只是将手指直直地按在显示器上，iptsd 可以很好地检测到触摸，但无法检测到手势。
+没有必要进行长时间的接触。长时间保持手指在显示器上不会提高校准精度，因为你只需要一个最小值和最大值。但它有可能在校准过程中引入噪声，这会扭曲最小/最大值。3000 到 4000 个样本应该足够了。
+🛎️注意：在校准过程中，防手掌误触功能被关闭，所以你不应该把你的手掌放到屏幕上，如果可以的话，把你的屏幕与键盘分离。
+当你完成校准过程后，你会在你的终端看到类似于：
+[17:46:55.678] [info] Connected to device 045E:0021 [17:46:57.186] [info] Samples: 3629 [17:46:57.186] [info] Size: 0.636 (Min: 0.425; Max: 0.859) [17:46:57.187] [info] Aspect: 1.298 (Min: 1.021; Max: 2.323) 的内容，在这种情况下新的值将会是：
+SizeMin: 0.425 cm SizeMax: 0.859 cm AspectMin: 1.021 AspectMax: 2.323 新建一个文件 /etc/iptsd.d/90-calibration.conf, 并输入类似于以下的内容：
+[Contacts] SizeMin = 0.425 SizeMax = 0.859 AspectMin = 1.021 AspectMax = 2.323 结束之后，你可以重启 iptsd 并试一试你新校准的值。
+sudo systemctl start $(sudo iptsd-find-service) 如果你发现 iptsd 没有识别到某个手势或接触，你应该重复这一过程并只做有问题的手势。并比较新旧数值，最后做相应调整。
+尾声——我需要帮助 我需要一些打包方面的帮助，iptsd 是一个非常有用的包，但是我打包它的时候遇到了一些困难，主要是由于 OBS 无法下载 microsoft-gsl 库而我打包 microsoft-gsl 库也遇到了困难造成的。如果你有兴趣，你可以看看 OBS 上的 home:TaivasJumala:Surface .
+Microsoft Surface 设备 &#160;&#x21a9;&#xfe0e;
+Portal:Tumbleweed - openSUSE Wiki &#160;&#x21a9;&#xfe0e;
+根据我在 Linux-Surface Dev 频道与开发者沟通的说法，未来有想法更新 Wiki 以提高可读性。同时，目前的页面组织方式不适合提供多语言指导，也是暂时在此处发布中文说明的原因。&#160;&#x21a9;&#xfe0e;
+以下资料或许能帮助你解决 BitLocker 造成的困扰：
+BitLocker | Microsoft Learn 在 Windows 中查找 BitLocker 恢复密钥 &#160;&#x21a9;&#xfe0e;
+]]></content></entry><entry><title>关于 Hugo NexT 组织</title><url>/about.html</url><categories/><tags/><content type="html">Hugo NexT 组织是由众多喜爱 NexT 主题及风格的世界各地友人共同组建而成，为的就是让这个主题继续在 Hugo 引擎中也能得到发扬光大，在此也欢迎你的加入！
 我们的愿景 延续 NexT 经典的黑白调搭配，保持简单的易用性及强大的功能。
 使用反馈 加入 GitHub Discussions 或 Gitter 在线讨论 🍻 GitHub Issues 提交错误报告 🐛 GitHub Feature 表新功能的想法 ✨ 同时国内用户也可加入 QQ 群交流： 604710815</content></entry><entry><title>站点示例</title><url>/flinks.html</url><categories/><tags/><content type="html">如想交换本站友情链接，请在评论区留下你的站点信息，格式参考如下：
 - name: Hugo-NexT desc: Hugo NexT 官方预览网站。 avatar: https://hugo-next.eu.org/imgs/hugo_next_avatar.png link: https://hugo-next.eu.org</content></entry></search>
