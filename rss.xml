@@ -6,7 +6,18 @@ Linked lists, pointer tricks and good taste
 &lt;/a> 的译文，包含了一些个人的内容。
 代码部分为 MIT 协议，所有权归原作者，翻译部分内容参考本站 CC 许可。&lt;/p>
 &lt;/blockquote>
-&lt;div style="max-width:854px">&lt;div style="position:relative;height:0;padding-bottom:56.25%">&lt;iframe src="https://embed.ted.com/talks/lang/en/linus_torvalds_the_mind_behind_linux" width="854" height="480" style="position:absolute;left:0;top:0;width:100%;height:100%" frameborder="0" scrolling="no" allowfullscreen>&lt;/iframe>&lt;/div>&lt;/div>
+&lt;div style="max-width:854px">
+&lt;div style="position:relative;height:0;padding-bottom:56.25%">
+&lt;iframe
+src="https://embed.ted.com/talks/lang/en/linus_torvalds_the_mind_behind_linux"
+width="854" height="480"
+style="position:absolute;
+left:0;top:0;
+width:100%;height:100%"
+frameborder="0" scrolling="no" allowfullscreen>
+&lt;/iframe>
+&lt;/div>
+&lt;/div>
 &lt;p>在
 &lt;a href="https://www.ted.com/talks/linus_torvalds_the_mind_behind_linux" title="2016 年的 TED 采访" rel="noopener external nofollow noreferrer" target="_blank" class=" exturl">
 2016 年的 TED 采访
