@@ -1,4 +1,14 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><search><entry><title>Toki</title><url>/post/toki/</url><categories/><tags/><content type="html"> 时不我待。</content></entry><entry><title>链表、指针技巧与编程品味</title><url>/post/linked-list-good-taste/</url><categories><category>译文</category><category>数据结构</category></categories><tags><tag>链表</tag><tag>指针</tag></tags><content type="html"> 本文是 Linked lists, pointer tricks and good taste 的译文，包含了一些个人的内容。 代码部分为 MIT 协议，所有权归原作者，翻译部分内容参考本站 CC 许可。
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><search><entry><title>WSL 安装实践：WSL2+Ubuntu-22.04+KDE 配置开发环境</title><url>/post/practice_wsl2_with_ubuntu_220.4_and_kde/</url><categories><category>文档</category></categories><tags><tag><no value=/><tag><no value=/></tags><content type="html"> 本文写于 2022 年 8 月 27 日，文章内容有效性可能随时间发生变化。
+本人是 Linux 新手，文章可能有不成熟之处。
+作者：Taivas Jumala
+update on 2022-12-20, 22:13:48 (UTC +08:00)
+WSL 的 systemd 得到了 Microsoft 官方的支持，本文一大部分仅剩参考意义。
+有鉴于此，我以后应该写一些不那么有时效性的，更有含金量一点的东西。
+而且，我在&amp;amp;quot;Pro WSL&amp;amp;quot;这本书里发现了很多差不多的内容，属于是重复造轮子了。
+什么是 WSL？为什么使用 WSL2？ WSL 全称 Windows Subsystem for Linux (适用于 Linux 的 Windows 子系统), 它可让开发人员按原样运行 GNU/Linux 环境 - 包括大多数命令行工具、实用工具和应用程序 - 且不会产生传统虚拟机或双启动设置开销。它的主要目标是提高文件系统性能，以及添加完全的系统调用兼容性。这一新的体系结构改变了这些 Linux 二进制文件与Windows 和计算机硬件进行交互的方式，但仍然提供与 WSL 1（当前广泛可用的版本）中相同的用户体验。
+单个 Linux 分发版可以在 WSL 1 或 WSL 2 体系结构中运行。 每个分发版可随时升级或降级，并且你可以并行运行 WSL 1 和 WSL 2 分发版。 WSL 2 使用全新的体系结构，该体系结构受益于运行真正的 Linux 内核。1
+​ 使用WSL2您可以：
+在 Microsoft Store 中选择你偏好的 GNU/Linux 分发版。 运行常用的命令行软件工具（例如 grep、sed、awk）或其他 ELF-64 二进制文件。 运行 Bash shell 脚本和 GNU/Linux 命令行应用程序，包括： 工具：vim、emacs、tmux 语言： NodeJS 、JavaScript、 Python 、Ruby、C/C++、C# 与 F#、Rust、Go 等 服务：SSHD、 MySQL 、Apache、lighttpd、 MongoDB 、 PostgreSQL 。 使用自己的 GNU/Linux 分发包管理器安装其他软件。 使用类似于 Unix 的命令行 shell 调用 Windows 应用程序。 在 Windows …</content></entry><entry><title>链表、指针技巧与编程品味</title><url>/post/linked-list-good-taste/</url><categories><category>译文</category><category>数据结构</category></categories><tags><tag>链表</tag><tag>指针</tag></tags><content type="html"> 本文是 Linked lists, pointer tricks and good taste 的译文，包含了一些个人的内容。 代码部分为 MIT 协议，所有权归原作者，翻译部分内容参考本站 CC 许可。
 在 2016 年的 TED 采访 1上（14:10 处），Linux 的创始人 Linus Trovalds 谈及了他认为编程时所谓的好品位。主持人展示了单链表中删除项的两种实现（文中将随后复现）。其中一种实现需要一个特别的条件语句来进行特判而另一个实现不需要。Linus, 亦如我们所料，偏好后一种。
 他评述道：
 [&amp;amp;hellip;] 我不会识图让你理解为什么它不包含 if 语句。我想让你理解的是有时候你从另一个角度思考问题来重写代码好让特殊情况消失而成为了一般情况，那就得到了一段好的代码。 [&amp;amp;hellip;] &amp;amp;ndash; L. Torvalds
