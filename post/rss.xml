@@ -1,33 +1,37 @@
-<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Taivas Jumala</title><link>https://taivasjumala.me/post/</link><description>Recent content in Posts on Taivas Jumala</description><generator>Hugo -- gohugo.io</generator><language>zh-cn</language><lastBuildDate>Mon, 29 May 2023 20:07:55 +0800</lastBuildDate><atom:link href="https://taivasjumala.me/post/rss.xml" rel="self" type="application/rss+xml"/><item><title>Toki</title><link>https://taivasjumala.me/post/toki/</link><pubDate>Mon, 29 May 2023 20:07:55 +0800</pubDate><guid>https://taivasjumala.me/post/toki/</guid><description>&lt;iframe style="border-radius:12px"
+<?xml version="1.0" encoding="utf-8" standalone="yes"?><rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom"><channel><title>Posts on Taivas Jumala</title><link>https://taivasjumala.me/post/</link><description>Recent content in Posts on Taivas Jumala</description><generator>Hugo -- gohugo.io</generator><language>zh-CN</language><lastBuildDate>Mon, 29 May 2023 20:07:55 +0800</lastBuildDate><atom:link href="https://taivasjumala.me/post/rss.xml" rel="self" type="application/rss+xml"/><item><title>Toki</title><link>https://taivasjumala.me/post/toki/</link><pubDate>Mon, 29 May 2023 20:07:55 +0800</pubDate><guid>https://taivasjumala.me/post/toki/</guid><description>&lt;iframe style="border-radius:12px"
 src="https://open.spotify.com/embed/track/5visTbsMvBwxveyRtpObTJ?utm_source=generator&amp;theme=0"
 width="100%" height="352"
 frameBorder="0" allowfullscreen=""
 allow="autoplay;
 clipboard-write; encrypted-media; fullscreen; picture-in-picture" loading="lazy">
 &lt;/iframe></description></item><item><title>链表、指针技巧与编程品味</title><link>https://taivasjumala.me/post/linked-list-good-taste/</link><pubDate>Sat, 08 Apr 2023 13:02:42 +0800</pubDate><guid>https://taivasjumala.me/post/linked-list-good-taste/</guid><description>&lt;blockquote>
-&lt;p>本文是
+&lt;p>本文是 
 &lt;a href="https://github.com/mkirchner/linked-list-good-taste" title="Linked lists, pointer tricks and good taste" rel="noopener external nofollow noreferrer" target="_blank" class=" exturl">
-Linked lists, pointer tricks and good taste
-&lt;i class="fa fa-external-link-alt">&lt;/i>
+ Linked lists, pointer tricks and good taste
+ 
+ &lt;i class="fa fa-external-link-alt">&lt;/i>
+ 
 &lt;/a> 的译文，包含了一些个人的内容。
 代码部分为 MIT 协议，所有权归原作者，翻译部分内容参考本站 CC 许可。&lt;/p>
 &lt;/blockquote>
 &lt;div style="max-width:854px">
-&lt;div style="position:relative;height:0;padding-bottom:56.25%">
-&lt;iframe
-src="https://embed.ted.com/talks/lang/en/linus_torvalds_the_mind_behind_linux"
-width="854" height="480"
-style="position:absolute;
-left:0;top:0;
-width:100%;height:100%"
-frameborder="0" scrolling="no" allowfullscreen>
-&lt;/iframe>
+ &lt;div style="position:relative;height:0;padding-bottom:56.25%">
+ &lt;iframe
+ src="https://embed.ted.com/talks/lang/en/linus_torvalds_the_mind_behind_linux"
+ width="854" height="480"
+ style="position:absolute;
+ left:0;top:0;
+ width:100%;height:100%"
+ frameborder="0" scrolling="no" allowfullscreen>
+ &lt;/iframe>
+ &lt;/div>
 &lt;/div>
-&lt;/div>
-&lt;p>在
+&lt;p>在 
 &lt;a href="https://www.ted.com/talks/linus_torvalds_the_mind_behind_linux" title="2016 年的 TED 采访" rel="noopener external nofollow noreferrer" target="_blank" class=" exturl">
-2016 年的 TED 采访
-&lt;i class="fa fa-external-link-alt">&lt;/i>
+ 2016 年的 TED 采访
+ 
+ &lt;i class="fa fa-external-link-alt">&lt;/i>
+ 
 &lt;/a>&lt;sup id="fnref:1">&lt;a href="#fn:1" class="footnote-ref" role="doc-noteref">1&lt;/a>&lt;/sup>上（14:10 处），Linux 的创始人 Linus Trovalds 谈及了他认为编程时所谓的&lt;strong>好品位&lt;/strong>。主持人展示了单链表中删除项的两种实现（文中将随后复现）。其中一种实现需要一个特别的条件语句来进行特判而另一个实现不需要。Linus, 亦如我们所料，偏好后一种。&lt;/p>
 &lt;p>他评述道：&lt;/p>
 &lt;blockquote>
